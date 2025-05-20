@@ -1,6 +1,10 @@
 import streamlit as st
 from dotenv import load_dotenv
 from PyPDF2 import PdfReader
+from docx import Document
+import openpyxl
+import csv
+import io
 
 from langchain.text_splitter import CharacterTextSplitter
 from langchain_community.chat_models import ChatOllama
@@ -11,13 +15,45 @@ from langchain.chains import ConversationalRetrievalChain
 
 from html_templates import css, user_template, bot_template
 
-# pega texto do pdf
-def get_pdf_text(pdf_docs):
+# Realiza extração de textos de diferentes tipos de arquivos
+def extract_text_from_files(uploaded_files):
     text = ""
-    for pdf in pdf_docs:
-        pdf_reader = PdfReader(pdf)
-        for page in pdf_reader.pages:
-            text += page.extract_text()
+    for file in uploaded_files:
+        filename = file.name.lower()
+
+        # Extração de .pdf
+        if filename.endswith(".pdf"):
+            pdf_reader = PdfReader(file)
+            for page in pdf_reader.pages:
+                text += page.extract_text() or ""
+        
+        # Extração de .docx
+        elif filename.endswith(".docx"):
+            doc = Document(file)
+            for para in doc.paragraphs:
+                text += para.text + "\n"
+        
+        # Extração de .xlsx
+        elif filename.endswith(".xlsx"):
+            wb = openpyxl.load_workbook(file, data_only=True)
+            for sheet in wb.worksheets:
+                for row in sheet.iter_rows(values_only=True):
+                    text += ' '.join([str(cell) if cell is not None else '' for cell in row]) + "\n"
+
+        # Extração de .csv
+        elif filename.endswith(".csv"):
+            decoded = file.read().decode("utf-8")
+            reader = csv.reader(io.StringIO(decoded))
+            for row in reader:
+                text += ' | '.join(row) + "\n"
+
+        # Extração de .txt ou .md
+        elif filename.endswith(".txt") or filename.endswith(".md"):
+            text += file.read().decode("utf-8") + "\n"
+
+        else:
+            text += f"\n[Unsupported file format: {file.name}]\n"
+    
     return text
 
 
@@ -79,12 +115,16 @@ def main():
     with st.sidebar:
         st.subheader("Seu arquivos:")
 
-        pdf_docs = st.file_uploader("Faça upload dos seus arquivos e aperte em Processar", accept_multiple_files=True)
+        pdf_docs = st.file_uploader(
+            "Faça upload dos seus arquivos e aperte em Processar (.pdf, .docx, .xlsx, .csv, .txt, .md)",
+            accept_multiple_files=True,
+            type=["pdf", "docx", "xlsx", "csv", "txt", "md"]
+        )
 
         if st.button("Processar"):
             with st.spinner("Processando"):
                 # pega texto do pdf
-                raw_text = get_pdf_text(pdf_docs)
+                raw_text = extract_text_from_files(pdf_docs)
 
                 # pega chunks do texto
                 text_chunks = get_text_chunks(raw_text)
