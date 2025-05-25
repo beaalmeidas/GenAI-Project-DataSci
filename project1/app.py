@@ -12,6 +12,7 @@ from langchain.embeddings import HuggingFaceEmbeddings          # nomic-embed
 from langchain.vectorstores import FAISS
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
+from langchain.prompts import PromptTemplate
 
 from html_templates import css, user_template, bot_template
 
@@ -77,9 +78,34 @@ def get_conversation_chain(vectorstore):
 
     llm = ChatOllama(model="llama3", temperature=0.1)           # usando o llama3
 
-    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
+    memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)          # memória histórico de conversa
+
+    # Prompt Template
+    CUSTOM_PROMPT_TEMPLATE = """
+    Você é um assistente de IA altamente especializado em responder perguntas com base em documentos fornecidos pelo usuário.
+    Seu objetivo é fornecer respostas **precisas**, **claras** e **baseadas estritamente nas informações** extraídas dos arquivos carregados.
+    Se a resposta não puder ser encontrada nos documentos, **admita que não sabe** ao invés de inventar uma resposta.
+    Você pode usar informações de múltiplos documentos. Se as informações não estiverem diretamente conectadas, diga isso claramente.
+    Responda SEMPRE em **português do Brasil**, mesmo que os documentos ou a pergunta estejam em outro idioma.
+    ---
+    Histórico da conversa:
+    {chat_history}
+
+    Pergunta do usuário:
+    {question}
+
+    Contexto dos documentos:
+    {context}
+
+    Resposta:
+    """
+
+    prompt = PromptTemplate(
+        template=CUSTOM_PROMPT_TEMPLATE,
+        input_variables=["chat_history", "question", "context"]
+    )
     
-    conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(), memory=memory)
+    conversation_chain = ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(), memory=memory, combine_docs_chain_kwargs={"prompt": prompt})
     return conversation_chain
 
 
