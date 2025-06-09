@@ -1,0 +1,27 @@
+[
+  {
+    "instruction": "Quais são os principais tipos de força muscular descritos no treinamento de musculação?",
+    "input": "",
+    "output": "Os principais tipos de força muscular são: força máxima, força hipertrófica (ou dinâmica), força explosiva e força de resistência (endurance ou resistência muscular localizada)."
+  },
+  {
+    "instruction": "Como a musculação contribui para a reabilitação de lesões articulares?",
+    "input": "",
+    "output": "A musculação pode fortalecer os músculos ao redor das articulações, melhorar a propriocepção, equilibrar a força e a flexibilidade, e assim contribuir significativamente para a reabilitação após lesões."
+  },
+  {
+    "instruction": "O que é uma periodização linear no contexto do treinamento de força?",
+    "input": "",
+    "output": "A periodização linear é um modelo de organização de treino em que se inicia com baixa intensidade e alto volume e, ao longo das semanas, passa para maior intensidade e menor volume. É dividida em mesociclos com objetivos distintos como adaptação, perda de gordura, hipertrofia e regeneração."
+  },
+  {
+    "instruction": "Qual a importância do mesociclo de regeneração em uma periodização de treinamento?",
+    "input": "",
+    "output": "O mesociclo de regeneração permite a recuperação das estruturas corporais sobrecarregadas durante o treinamento intenso, prevenindo inflamações e lesões como tendinite e bursite. Ele geralmente envolve a redução ou interrupção temporária do treino de força."
+  },
+  {
+    "instruction": "Como se identifica o nível de experiência de um aluno na musculação?",
+    "input": "",
+    "output": "O nível de experiência é baseado no tempo de prática anterior e no conhecimento dos exercícios. Iniciantes não têm familiaridade com a mecânica dos movimentos; intermediários conhecem alguns exercícios; e avançados dominam aparelhos, pesos livres e técnicas mais complexas."
+  }
+]
