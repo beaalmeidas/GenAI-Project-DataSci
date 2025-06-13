@@ -1,0 +1,54 @@
+define_computer_config_task:
+  description: >
+    Com base no seguinte pedido do usuário: "{pedido_usuario}", defina uma configuração
+    de computador ideal — seja notebook ou desktop — para essa finalidade.
+    Inclua informações técnicas como: processador, memória RAM, placa de vídeo, armazenamento,
+    placa-mãe (se aplicável) e fonte.
+
+    Utilize ferramentas como o SerperDevTool para verificar superficialmente a disponibilidade
+    desses componentes no mercado brasileiro, garantindo que as peças sugeridas sejam realistas
+    e viáveis para o cenário atual.
+
+  expected_output: >
+    Uma configuração completa de computador (ou notebook), com especificações técnicas recomendadas
+    para a tarefa descrita. Inclua todos os principais componentes e justifique brevemente cada escolha
+    com base na necessidade do usuário.
+  agent: computer_specialist
+
+search_prices_task:
+  description: >
+    Faça uma pesquisa detalhada de preços atualizados para os componentes
+    definidos anteriormente. Utilize ferramentas como o SerperDevTool
+    para encontrar os melhores preços em sites confiáveis no Brasil,
+    respeitando o orçamento informado pelo usuário, caso esteja disponível.
+
+    Se a opção for um notebook, busque modelos completos que correspondam
+    às especificações técnicas sugeridas anteriormente, com respectivos preços médios.
+  expected_output: >
+    Uma tabela com os preços médios e links para compra de cada componente
+    ou notebook. Incluir nome do item, valor encontrado e link da loja.
+  agent: price_researcher
+
+suggest_usage_task:
+  description: >
+    Com base na configuração proposta, sugira uma lista de aplicações, programas
+    ou tarefas que o usuário poderá executar com eficiência nessa máquina.
+    Priorize sugestões alinhadas com a área de atuação informada no pedido do usuário.
+
+    Divida as sugestões por categorias como produtividade, jogos, edição de vídeo, segurança, etc.
+  expected_output: >
+    Lista categorizada com sugestões de aplicações, softwares e casos de uso,
+    demonstrando como o usuário pode aproveitar ao máximo sua máquina.
+  agent: usage_recommender
+
+generate_final_report_task:
+  description: >
+    Compile os resultados das tasks anteriores em um único documento bem estruturado.
+    Organize o conteúdo em seções claras: "Configuração Recomendada", "Preços Pesquisados" e "Sugestões de Uso".
+    O documento deve ser formatado em Markdown para fácil leitura e compartilhamento.
+
+    Seu trabalho final deve ser salvo no arquivo 'relatorio_final.md'.
+  expected_output: >
+    Documento final em Markdown contendo todas as informações relevantes, organizado e pronto para envio ao usuário.
+  agent: usage_recommender
+  output_file: relatorio_final.md
