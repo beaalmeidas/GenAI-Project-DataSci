@@ -40,3 +40,15 @@ suggest_usage_task:
     Lista categorizada com sugestões de aplicações, softwares e casos de uso,
     demonstrando como o usuário pode aproveitar ao máximo sua máquina.
   agent: usage_recommender
+
+generate_final_report_task:
+  description: >
+    Compile os resultados das tasks anteriores em um único documento bem estruturado.
+    Organize o conteúdo em seções claras: "Configuração Recomendada", "Preços Pesquisados" e "Sugestões de Uso".
+    O documento deve ser formatado em Markdown para fácil leitura e compartilhamento.
+
+    Seu trabalho final deve ser salvo no arquivo 'relatorio_final.md'.
+  expected_output: >
+    Documento final em Markdown contendo todas as informações relevantes, organizado e pronto para envio ao usuário.
+  agent: usage_recommender
+  output_file: relatorio_final.md

@@ -64,7 +64,13 @@ class Pcrecommender():
             config=self.tasks_config['search_prices_task'], # type: ignore[index]
             
         )
-        
+
+    @task
+    def generate_final_report_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['generate_final_report_task'],  # type: ignore[index]
+        )
+
     @task
     def suggest_usage_task(self) -> Task:
         return Task(
