@@ -6,9 +6,14 @@ from typing import List
 # you can use the @before_kickoff and @after_kickoff decorators
 # https://docs.crewai.com/concepts/crews#example-crew-class-with-decorators
 
+from crewai_tools import SerperDevTool
+
+
+
+
 @CrewBase
-class FullstackAgents():
-    """FullstackAgents crew"""
+class Pcrecommender():
+    """Pcrecommender crew"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -20,23 +25,27 @@ class FullstackAgents():
     # If you would like to add tools to your agents, you can learn more about it here:
     # https://docs.crewai.com/concepts/agents#agent-tools
     @agent
-    def product_manager(self) -> Agent:
+    def computer_specialist(self) -> Agent:
+        serper_tool = SerperDevTool()
         return Agent(
-            config=self.agents_config['product_manager'], # type: ignore[index]
-            verbose=True
+            config=self.agents_config['computer_specialist'], # type: ignore[index]
+            verbose=True,
+            tools=[serper_tool]
         )
 
     @agent
-    def backend_developer(self) -> Agent:
+    def price_researcher(self) -> Agent:
+        serper_tool = SerperDevTool()
         return Agent(
-            config=self.agents_config['backend_developer'], # type: ignore[index]
-            verbose=True
+            config=self.agents_config['price_researcher'], # type: ignore[index]
+            verbose=True,
+            tools=[serper_tool]
         )
         
     @agent
-    def frontend_developer(self) -> Agent:
+    def usage_recommender(self) -> Agent:
         return Agent(
-            config=self.agents_config['frontend_developer'], # type: ignore[index]
+            config=self.agents_config['usage_recommender'], # type: ignore[index]
             verbose=True
         )
 
@@ -44,26 +53,28 @@ class FullstackAgents():
     # task dependencies, and task callbacks, check out the documentation:
     # https://docs.crewai.com/concepts/tasks#overview-of-a-task
     @task
-    def requirements_task(self) -> Task:
+    def define_computer_config_task(self) -> Task:
         return Task(
-            config=self.tasks_config['requirements_task'], # type: ignore[index]
+            config=self.tasks_config['define_computer_config_task'], # type: ignore[index]
         )
 
     @task
-    def backend_task(self) -> Task:
+    def search_prices_task(self) -> Task:
         return Task(
-            config=self.tasks_config['backend_task'], # type: ignore[index]
+            config=self.tasks_config['search_prices_task'], # type: ignore[index]
+            
         )
         
     @task
-    def frontend_task(self) -> Task:
+    def suggest_usage_task(self) -> Task:
         return Task(
-            config=self.tasks_config['frontend_task'], # type: ignore[index]
+            config=self.tasks_config['suggest_usage_task'], # type: ignore[index]
+            
         )
 
     @crew
     def crew(self) -> Crew:
-        """Creates the FullstackAgents crew"""
+        """Creates the Pcrecommender crew"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 

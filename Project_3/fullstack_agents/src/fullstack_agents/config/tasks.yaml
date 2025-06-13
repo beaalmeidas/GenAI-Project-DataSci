@@ -1,17 +1,29 @@
-research_task:
+requirements_task:
   description: >
-    Conduct a thorough research about {topic}
-    Make sure you find any interesting and relevant information given
-    the current year is {current_year}.
+    Entenda o pedido do usuário: "{pedido_usuario}"
+    Transforme isso em uma especificação clara para a landing page.
+    Detalhe as seções necessárias (ex: cabeçalho, formulário de contato, área de serviços),
+    e descreva as funcionalidades básicas.
   expected_output: >
-    A list with 10 bullet points of the most relevant information about {topic}
-  agent: researcher
+    Uma especificação em texto simples, com as seções e funcionalidades da landing page claramente descritas.
+  agent: product_manager
 
-reporting_task:
+backend_task:
   description: >
-    Review the context you got and expand each topic into a full section for a report.
-    Make sure the report is detailed and contains any and all relevant information.
+    Com base na especificação fornecida pelo Product Manager, crie um código completo em Flask.
+    O Flask deve conter uma rota '/' que retorna "Landing page online"
+    e uma rota '/contato' que aceita POST com dados do formulário e retorna uma mensagem de sucesso.
+    O código deve ser apresentado como string no console.
   expected_output: >
-    A fully fledged report with the main topics, each with a full section of information.
-    Formatted as markdown without '```'
-  agent: reporting_analyst
+    O código completo do app Flask em uma string, pronto para execução.
+  agent: backend_developer
+
+frontend_task:
+  description: >
+    Com base na especificação fornecida pelo Product Manager e código criado pelo Backend Developer, crie o código front-end da landing page.
+    Utilize HTML/CSS/JS puro ou React, conforme necessário. A landing page deve ser responsiva e visualmente agradável, seguindo as melhores práticas de design.
+    A página deve ter as especificações fornecidas pelo Product Manager.
+    O código deve ser apresentado como string no console.
+  expected_output: >
+    O código HTML/CSS/JS completo como string no console, pronto para salvar e rodar.
+  agent: frontend_developer
