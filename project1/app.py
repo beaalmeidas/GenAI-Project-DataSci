@@ -1,10 +1,9 @@
 import streamlit as st
 from dotenv import load_dotenv
 import os
+from datetime import datetime
 
 from langchain_core.messages import HumanMessage, AIMessage
-
-from werkzeug.security import check_password_hash, generate_password_hash
 
 from html_templates import css, user_template, bot_template
 import database
@@ -18,6 +17,7 @@ def main():
     st.set_page_config(page_title="Sistema RAG com consultas Inteligentes", page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
 
+    # Inicialização do SessionStates
     if "conversation" not in st.session_state: st.session_state.conversation = None
     if "chat_history" not in st.session_state: st.session_state.chat_history = []
     if "vectorstore_loaded_for_user" not in st.session_state: st.session_state.vectorstore_loaded_for_user = False
@@ -58,10 +58,14 @@ def main():
         # Mostra histórico de conversa, utilizando o template (html_templates.py)
         for i, message in enumerate(st.session_state.chat_history):
             msg_content = getattr(message, 'content', str(message))
+            timestamp = datetime.now().strftime("%H:%M")            # -> Hora atual
+
             if isinstance(message, HumanMessage) or (i % 2 == 0 and not isinstance(message, AIMessage)):            # mensagem do usuário
-                st.write(user_template.replace("{{MSG}}", msg_content), unsafe_allow_html=True)
+                st.write(user_template.replace("{{MSG}}", msg_content).replace("{{MSG_ID}}", f"user_{i}")
+                        .replace("{{TIMESTAMP}}", timestamp), unsafe_allow_html=True)
             elif isinstance(message, AIMessage) or (i % 2 != 0):                                                    # meensagem da LLM
-                st.write(bot_template.replace("{{MSG}}", msg_content), unsafe_allow_html=True)
+                st.write(bot_template.replace("{{MSG}}", msg_content).replace("{{MSG_ID}}", f"bot_{i}")
+                        .replace("{{TIMESTAMP}}", timestamp), unsafe_allow_html=True)
         st.markdown("---")
 
     # Input do usuário
@@ -84,6 +88,8 @@ def main():
 
     # Sidebar (upload de arquivos)
     with st.sidebar:
+        st.markdown("")
+    
         uploader_key = f"file_uploader_{st.session_state.get('logged_in_user_id', 'guest')}"
         
         pdf_docs = st.file_uploader(
